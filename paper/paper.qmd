@@ -470,6 +470,9 @@ print(fig_modelresults2)
 
 ```
 
+
+
+\newpage
 # Discussion {#sec-discussion}
 
 ## Relationship between Time-based and Crime Indicators
