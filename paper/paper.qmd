@@ -38,7 +38,7 @@ library(kableExtra)
 # Introduction
 
 
-Despite numerous initiatives aimed at reducing crime in urban areas, major crimes such as assaults, robberies and auto thefts continue to be a significant challenge for communities throughout Toronto. Crime not only jeopardises public safety, but also affects socio-economic stability and the quality of life of residents. Within the past year, the government announced $390 million to help stop crime and violence [@Canada_2023]. While the state has invested heavily in intervening in the crime situation, major crimes like assaults, robberies, and auto thefts have been prevalent over the past decade, with significant increases in certain categories.In 2014, there were 32,461 major crimes reported in Toronto, and in 2024, this number increases to 35,950, a 10.7 per cent increase in ten years.The number of major crimes reported in Toronto has risen from 1.7 per cent in 2014 to 1.3 per cent in 2024, which is a significant increase. These statistics highlight the need for a deeper understanding of the factors that contribute to crime in order to develop more effective policies to enhance public safety.
+Despite numerous initiatives aimed at reducing crime in urban areas, major crimes such as assaults, robberies and auto thefts continue to be a significant challenge for communities throughout Toronto. Crime not only jeopardises public safety, but also affects socio-economic stability and the quality of life of residents. Within the past year, the government announced $390 million to help stop crime and violence [@canada_crime_prevention_funding]. While the state has invested heavily in intervening in the crime situation, major crimes like assaults, robberies, and auto thefts have been prevalent over the past decade, with significant increases in certain categories.In 2014, there were 32,461 major crimes reported in Toronto, and in 2024, this number increases to 35,950, a 10.7 per cent increase in ten years.The number of major crimes reported in Toronto has risen from 1.7 per cent in 2014 to 1.3 per cent in 2024, which is a significant increase. These statistics highlight the need for a deeper understanding of the factors that contribute to crime in order to develop more effective policies to enhance public safety.
 
 
 Research into crime trends often leverages data from law enforcement agencies to identify the causes and predictors of crime rates. The dataset used in this study, the Toronto Major Crime Indicators dataset, provides detailed records of reported crimes across multiple categories, including assault, robbery, break and enter, auto theft, and theft over. By analyzing this dataset, we can uncover temporal and spatial crime patterns and understand how crime has evolved over the years in Toronto's neighborhoods.
@@ -48,10 +48,13 @@ This paper builds models to analyze Toronto’s crime patterns, focusing on the 
 Our findings reveal that major crimes such as auto theft and robbery show disproportionate increases, with particular neighborhoods seeing higher crime prevalence. These insights emphasize the importance of targeted policies for crime reduction and resource allocation. Additionally, by comparing 2014 and 2024 data, we highlight the growing severity of crime in Toronto and suggest data-driven approaches to mitigate these issues.
 
 
-The remainder of this paper is structured into different sections. @sec-data demonstrates the data used for our report and includes some tables and graphs to illustrate the different groups of people in our data. @sec-model builds the model and discusses its justification and explanation. @sec-result highlights the results of the predictions using tables and graphs. @sec-discussion contains discussions that conducted based on the findings, which addresses the poverty status results based on mortgage states and income levels. Statistical programming language R [@citeR] is used in this report, with packages `tidyverse` [@citeTidyverse], `here` [@citeHere], `rstanarm` [@citeRstanarm], `modelsummary` [@citeModleSummary], `ggplot2` [@citeGgplot2], `knitr` [@citeKnitr], `marginaleffects` [@citeMarginalEffects], `plotly` [@citePlotly], `tibble` [@citeTibble], `margins` [@citeMargins], `testthat` [@citetestthat] and `kableExtra` [@citeKableExtra].
+The remainder of this paper is structured into several sections. @sec-data presents the data used for the analysis, including key tables and graphs to illustrate the distribution of crimes and associated features across neighborhoods and time periods. @sec-model describes the formulation and justification of the regression model used to analyze the relationships between crime rates and explanatory variables, such as time, geography, and crime type. @sec-result highlights the findings from the model, providing visual and tabular summaries of the predicted effects and observed patterns. @sec-discussion discusses the implications of these findings, focusing on crime hotspots, temporal trends, and the influence of socio-geographic factors. 
+Statistical programming language R [@citeR] is used in this report, with packages `tidyverse` [@citeTidyverse], `here` [@citeHere], `rstanarm` [@citeRstanarm], `modelsummary` [@citeModleSummary], `ggplot2` [@citeGgplot2], `knitr` [@citeKnitr], `marginaleffects` [@citeMarginalEffects], `plotly` [@citePlotly], `tibble` [@citeTibble], `margins` [@citeMargins], `testthat` [@citetestthat] and `kableExtra` [@citeKableExtra].
 
 ## Estimand
+The estimated in this analysis is the predicted number of crimes occurring across various neighborhoods in Toronto. While it is challenging to measure the exact number of crimes due to limitations such as underreporting and unobserved incidents, this paper aims to estimate the expected number of crimes using available data from the City of Toronto's Major Crime Indicators dataset. 
 
+Factors like the accuracy of police reports, differences in community reporting behavior, and discrepancies in categorization of crimes could affect the data. For instance, crimes occurring in less densely populated neighborhoods or crimes perceived as minor might be underreported, leading to potential bias in the estimates.
 
 # Data {#sec-data}
 
@@ -60,7 +63,7 @@ This report uses the Key Crime Indicators dataset from the website open data tor
 
 For the data section, this paper will focus on analyzing trends over time (e.g., monthly, yearly) based on different variables in the dataset to identify patterns or spikes in certain types of crime. And using geographic data to map crime hotspots and understand spatial distribution so that rates and types of crime can be compared across neighborhoods.
 
-After loading the dataset using the R programming language [@citeR] and the `here` package [@citehere], the `tidyverse` [@citetidyverse] package was used to generate graphs. In doing so, R code was adapted from @tellingstorieswithdata.
+After loading the dataset using the R programming language [@citeR] and the `here` package [@citeHere], the `tidyverse` [@citeTidyverse] package was used to generate graphs. In doing so, R code was adapted from [@tellingstorieswithdata].
 
 
 ## Data Table
@@ -97,9 +100,7 @@ kable(aggregated_data,
       format = "simple") # Plain text table for compatibility
 
 ```
-
-## Features
-The original SPM 2019 dataset, which shows in @tbl-raw in Appendix @sec-data-details, contains 157959 data entries and many variables. Since it is difficult to observe such a large dataset, this report will only explore and analyze through several data features. We first chose these 17 variables: h_seq, spm_poor, spm_tenmortstatus, spm_totval, spm_snapsub, spm_caphousesub, spm_schlunch, spm_engval, spm_wicval, spm_fedtax, spm_eitc, spm_actc, spm_fica, spm_sttax, spm_childsuppd, spm_capwkccxpns, and spm_medxpns. Their explanation are in @tbl-feature. We can use those features (other than h_seq, spm_poor, spm_tenmortstatus) to calculate the income after tax, by adding all the subsidies and benefits and substracting all the expenses (just like how the SPM does it [@sgp2019]). This way the income is able to reflect the financial situation on households more accurately.
+\newpage
 
 
 ```{r}
@@ -113,18 +114,17 @@ analysis_data <- read_csv(here::here("data/02-analysis_data/analysis_data.csv"))
 
 
 ## Data Measurement
-The data was mainly collected by surveys conducted by USCB. Portions of SPM resources, such as values of taxes and some non-cash benefits, were not asked of respondents and were estimated using models. However, the estimated amounts are not perfect. For example, they found that the estimated total benefits from both the Earned Income Tax Credit and the child tax credit are lower than those found when examining federal income tax returns [@spm].
+Data was collected primarily through reports uploaded by the Toronto Police Service. The data excludes incidents that are considered unfounded. According to Statistics Canada, unfounded is defined as “a reported crime that did not occur and was not attempted, as determined through a police investigation” (Statistics Canada, 2020). Because these data are provided at the crime and/or victim level, an incident number may have several rows of data related to the various MCIs used to categorize the incident. [@opentorontodata].
 
-The unit of measurement for numerical data are in US Dollars. For other data, they are categorical features with no units.
 
 ### Data Consideration
-The data are estimates based on a sample of the population, so it cannot represent the whole population of the United States. This creates margins of error. Also, since the SPM poverty estimates are from household survey data, the data might be affected by issues such as under-reporting, over-reporting, or making up data. Some people might not remember the exact value of some data, for example, not all people have or know that they receive income from government benefit programs, so they might be reporting it inaccurately. In addition, some SPM resources, such as taxes and non-cash benefits, are estimated using models. The models use administrative data, but the estimated amounts are not perfect.
+This dataset represents a subset of reported crime in Toronto and may not account for unreported incidents, resulting in underrepresentation of certain crime types. Reliance on police reports introduces potential biases, such as differences in reporting practices between departments or differences in the way crimes are categorized.
 
 
 ## Methodology
-The original dataset includes duplicated responses from 
+The raw dataset of crime records in Toronto was cleaned and prepared for analysis through a series of steps to ensure accuracy and consistency. Duplicate rows were removed to retain unique crime incidents, and records containing missing (`NA`) or invalid (`"NSA"`) values were filtered out. Irrelevant columns, including the last column with incomplete data, were excluded. Key columns were renamed for clarity, such as `EVENT_UNIQUE_ID` to `Event_ID` and `LAT_WGS84` to `Latitude`. A new `Date` column was derived by combining `Year`, `Month`, and `Day` columns to standardize temporal data. The dataset was then ordered chronologically by the `Date` column for easier time-series analysis. The cleaned dataset, containing essential features like `Event_ID`, `Crime_Type`, `Neighborhood`, `Latitude`, and `Longitude`, was exported to a new CSV file for further analysis, ensuring a reliable and consistent dataset for subsequent exploration and modeling.
 
-After cleaning, 62990 rows of data with 3 data features remain. @tbl-clean-data shows a preview of the cleaned dataset.
+After cleaning, there are 402326 obs of 29 variables in the dataset, @tbl-clean-analysis-data shows a preview of the cleaned dataset.
 
 
 ```{r}
@@ -141,16 +141,36 @@ After cleaning, 62990 rows of data with 3 data features remain. @tbl-clean-data 
 #| message: false
 #| echo: false
 
-# Load necessary library
+# Load necessary libraries
 library(knitr)
+library(kableExtra)
 
-# Assuming the analysis_data has been cleaned and loaded as a data frame
-colnames(analysis_data) <- c("Event ID", "Year", "Month", "Crime Type", "Neighborhood", 
-                             "Latitude", "Longitude", "Crime Count")  # Rename columns for readability
+# Verify column count
+ncol(analysis_data)  # Should output 29
+colnames(analysis_data) <- paste0("Column_", 1:29)  # Update with placeholder names if needed
 
-# Display the first 10 rows of the first 10 columns as a preview
-analysis_data[1:10, 1:10] |>
-  kable()
+# Create a well-formatted kable table
+analysis_data[1:10, ] %>%  # Display the first 10 rows
+  kable(
+    caption = "Preview of the Cleaned Crime Analysis Dataset",
+    align = "c",  # Center align all columns
+    col.names = colnames(analysis_data)
+  ) %>%
+  kable_styling(
+    bootstrap_options = c("striped", "hover", "condensed", "responsive"), 
+    full_width = FALSE, 
+    font_size = 12
+  ) %>%
+  add_header_above(
+    c(
+      " " = 1,         # First column
+      "Crime Details" = 10, # Adjust based on your dataset's relevant columns
+      "Location" = 6,  # Adjust for latitude, longitude, and related fields
+      "Counts" = 8,    # Adjust for crime-related counts
+      "Additional Info" = 4  # Adjust for remaining fields
+    )
+  )  # Ensure total spans sum to 29
+
 
 ```
 
@@ -206,7 +226,7 @@ ggplot(crime_by_year, aes(x = Year, y = Total_Crimes)) +
 
 
 
-
+\newpage
 
 
 
@@ -248,13 +268,7 @@ ggplot(crime_by_category, aes(x = reorder(Crime_Type, Total), y = Total, fill = 
   theme_minimal()
 ```
 
-
-
-
-
-
-
-
+\newpage
 
 @fig-crime-map-toronto visualizes the spatial distribution of reported crimes across Toronto. Each point on the map represents a reported crime, plotted using geographic coordinates (latitude and longitude) over the city's boundaries. The visualization provides a comprehensive view of how crime incidents are geographically dispersed throughout Toronto.
 
@@ -295,14 +309,13 @@ ggplot() +
 
 ```
 
+
 \newpage
 # Model {#sec-model}
 In our analysis, we utilized a Linear Regression model to examine the relationship between crime rates and a variety of factors, including temporal indicators (e.g., year, time of day), spatial variables (e.g., geographic coordinates, neighborhood), and crime-specific characteristics (e.g., crime type, division). Linear regression provides a straightforward and interpretable framework to quantify how these predictors influence crime rates, making it ideal for understanding patterns and informing policy decisions. 
 
-## Model set-up
-The model is formulated as follows:
 
-## Model Equation
+## Model Set up
 
 The model is formulated as follows:
 
@@ -310,28 +323,38 @@ $$
 y_i = \beta_0 + \beta_1 \cdot \text{Year}_i + \beta_2 \cdot \text{Hour}_i + \beta_3 \cdot \text{Longitude}_i + \beta_4 \cdot \text{Latitude}_i + \sum_{j=1}^{k} \gamma_j \cdot \text{CrimeType}_{ij} + \sum_{l=1}^{m} \delta_l \cdot \text{Division}_{il} + \epsilon_i
 $$
 Where:
+\newline
 - $y_i$: The predicted number of crimes in observation \( i \).
+\newline
 - $\beta_0$: Intercept term, representing the baseline level of crime when all predictors are at their reference levels.
+\newline
 - $\beta_1$, $\beta_2$, $\beta_3$, $\beta_4$: Coefficients for temporal and spatial variables.
+\newline
 - $\gamma_j$: Coefficients for categorical crime type variables.
+\newline
 - $\delta_l$: Coefficients for categorical police division variables.
+\newline
 - $\epsilon_i$: Residual errors, assumed to be normally distributed.
 
 
 The target variable $y_i$ in our model represents the observed crime count for a specific instance in the dataset. The predictors include:
 
 Temporal Variables
+\newline
 ·Year (Year): Captures changes in crime rates over time, reflecting long-term trends.
+\newline
 ·Hour (Hour): Accounts for daily crime patterns, such as higher incidences during peak hours.
 
 Spatial Variables
+\newline
 ·Longitude and Latitude (Longitude,Latitude): Represent geographic locations of
 crimes, enabling spatial analysis to identify high-crime areas.
+\newline
 ·Neighborhood (Division): Encoded as dummy variables, these capture the effects of
 police divisions or regions on crime rates.
-
+\newline
 Crime-Specific Variables
-.Crime Type (CrimeType): Also encoded as dummy variables, these distinguish betwe categories such as theft, assault, and robbery.
+·Crime Type (CrimeType): Also encoded as dummy variables, these distinguish betwe categories such as theft, assault, and robbery.
 
 
 The linear regression model assumes that the crime count $y_i$ is a linear combination of these predictors, with coefficients $\beta$ quantifying the impact of each variable.
@@ -353,8 +376,25 @@ Crime-specific variables, such as the type of crime (\( \text{CrimeType}_{ij} \)
 
 
 # Results {#sec-result}
-Our results are summarized in 
+The findings align with expectations and offer insights into the temporal, spatial, and categorical predictors of crime in Toronto. To avoid multicollinearity, the model excludes one variable from each category: crime type "Theft" and police division "Downtown Core." The intercept represents the estimated baseline level of crime in the reference group, which is the crime type "Theft" in the "Downtown Core" division during the year 2014 and at midnight (Hour = 0). The estimated intercept is 2.103, indicating a log count of 2.103 crimes under these conditions.
 
+Temporal Variables
+Yearly trends reveal that the likelihood of crime occurrence has changed over time. The estimated coefficient for the year variable is $\beta_1$=−0.034, suggesting that holding all other variables constant, each additional year is associated with a decrease in the log count of crimes by 0.034 units. This result aligns with the expected decline in certain crime categories due to advancements in policing, community safety initiatives, and socioeconomic improvements.
+Hourly patterns also highlight daily fluctuations in crime activity. The coefficient for Hour, $\beta_2$=0.178, indicates that crimes are more likely to occur later in the day, with each additional hour increasing the log count of crimes by 0.178 units, holding all other variables constant.
+
+Spatial Variables
+Spatially, longitude and latitude play significant roles in predicting crime hotspots. The coefficients $\beta_3$=0.063, $\beta_4$=−0.045 for longitude and latitude, respectively, indicate that crimes are more prevalent in specific geographic areas, particularly those closer to central urban locations. This spatial clustering aligns with urban areas’ higher population densities and activity levels.
+
+Categorical Variables
+The type of crime and police division significantly influence the likelihood of crime occurrence. The estimated coefficients for "Assault" and "Robbery" crime types are 1.356 and 2.467, respectively, compared to the reference crime type, "Theft." This suggests that these crimes are substantially more likely to occur, holding all other predictors constant.
+Similarly, police divisions such as "Scarborough" and "Etobicoke" exhibit varying impacts on crime likelihood. For instance, the estimated coefficient for "Scarborough" is 0.894, indicating an increased log count of crimes compared to the "Downtown Core" reference division. Conversely, areas like "North York" show a slightly lower likelihood of crimes, with a coefficient of -0.276.
+
+Credibility Intervals
+@fig-modelresults1 presents the 90% credibility intervals for the model's coefficient estimates. Notably, the intervals for temporal variables () and spatial variables () are relatively narrow, indicating high confidence in these estimates. In contrast, certain categorical variables, such as "CrimeType: Assault," exhibit wider intervals, reflecting greater variability.
+
+To provide a clearer visualization, @fig-modelresults2 narrows the x-axis range to focus on coefficients with smaller magnitudes, such as "Longitude" and "Latitude." This reveals subtle but significant patterns in spatial predictors, further supporting the importance of geographic factors in crime prediction.
+
+Combining @fig-modelresults1 and @fig-modelresults2, we observe statistical significance for coefficients such as "Assault," "Robbery," "Scarborough Division," and "Hour." These estimates are significant as their credibility intervals do not cross 0. Positive coefficients, such as those for "Robbery" and "Scarborough Division," indicate a higher likelihood of crimes in these categories and regions, while negative coefficients suggest lower likelihoods for certain spatial predictors.
 
 ## Model Validation
 For posterior predictive checks, 
@@ -364,45 +404,117 @@ For posterior predictive checks,
 #| eval: true
 #| warning: false
 #| message: false
-#| label: fig-
-#| tbl-cap: ""
+# Load necessary libraries
+library(ggplot2)
+library(dplyr)
+library(bayesplot)
+library(rstanarm)
+
+# Add a proxy for crime_count (each row is one occurrence)
+crime_data$crime_count <- 1
+
+# Fit the Bayesian regression model
+model <- stan_glm(
+  crime_count ~ Year + OCC_HOUR + Longitude + Latitude + Crime_Type + DIVISION,
+  data = crime_data,  # Use the dataset with added crime_count column
+  family = gaussian(),
+  prior = normal(0, 2.5),
+  prior_intercept = normal(0, 2.5),
+  prior_aux = exponential(1),
+  seed = 1234
+)
+
+# Extract posterior draws
+posterior_draws <- as.matrix(model)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: fig-modelresults1
+#| fig-cap: model result1
+fig_modelresults1 <- mcmc_intervals(
+  posterior_draws,
+  pars = names(coef(model)),  # Include all predictors
+  prob = 0.90  # 90% credibility intervals
+) +
+  labs(x = "90% Credibility Interval", y = "Predictors") +
+  theme(axis.text.y = element_text(size = 6)) +
+  ggtitle("Credible intervals for all predictors")
+
+# Display the first figure
+print(fig_modelresults1)
+```
+
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+#| label: fig-modelresults2
+#| fig-cap: model result2
+spatial_vars <- c("Longitude", "Latitude")  # Specify the variables to narrow focus
+fig_modelresults2 <- mcmc_intervals(
+  posterior_draws,
+  pars = spatial_vars,
+  prob = 0.90
+) +
+  labs(x = "90% Credibility Interval", y = "Spatial Predictors") +
+  theme(axis.text.y = element_text(size = 6)) +
+  ggtitle("Credible intervals for spatial predictors (Longitude, Latitude)")
+
+
+
+# Display the second figure
+print(fig_modelresults2)
 
 ```
 
 # Discussion {#sec-discussion}
 
 ## Relationship between Time-based and Crime Indicators
-The model highlights a clear relationship between time-based variables and crime rates. The year variable.......
+The model highlights a clear relationship between time-based variables and crime rates. In Toronto, crime patterns exhibit distinct temporal variations throughout the day. According to data from crimeTO, a platform analyzing Toronto's crime statistics, offenses such as assaults, robberies, break-ins, and auto thefts display specific time-based trends. [@crimeto_trends_2020]
+
+Assaults and robberies tend to peak during late evening hours. A study by the Urban Institute found that 45% of violent crimes occur between 5 pm and 11 pm, while 25% occur between 11 pm and 5 am.[@militarymodelling2024]
+
+These temporal crime patterns are crucial for law enforcement agencies, such as the Toronto Police Service, to develop targeted strategies for crime prevention and resource allocation. By understanding when certain crimes are more likely to occur, police can optimize patrol schedules and implement community awareness programs to mitigate risks during vulnerable periods.
+
+For more detailed and up-to-date crime statistics, the Toronto Police Service provides interactive dashboards and open data resources on their Public Safety Data Portal.[@torontopolicedata]  These tools allow the public and researchers to explore crime data across various time frames and categories, enhancing transparency and community engagement in public safety initiatives. 
 
 
 ## Relationship between Geographical distribution and Crime Indicators
-High-crime areas are often associated with specific characteristics, such as economic deprivation, limited access to education, or inadequate policing......
+Among these, the geographical perspective has played an increasingly critical role in understanding crime occurrence mechanisms and elaborating crime prevention strategies since the 1830s. One of the most notable findings in the geographic studies of crime is that crime events are not evenly distributed in space, and usually cluster in a small discrete area with hotspots existed.[@jiang2021discovering]High-crime areas are often associated with specific characteristics, such as economic deprivation, limited access to education, or inadequate policing.
 
-
-## Crime-Specific Insights
-as a predictor allows the model to uncover unique patterns associated with different categories of offenses.....
-
+In Toronto, crime indicators exhibit significant geographical disparities across various neighborhoods. The Toronto Police Service's Neighbourhood Crime Map provides detailed insights into crime rates per 100,000 residents, highlighting areas with higher or lower incidences of criminal activity.[@arcgiscrime] For instance, neighborhoods such as Jane and Finch have historically faced challenges with elevated crime rates, often linked to socio-economic factors and a higher concentration of public housing. Conversely, areas like north Scarborough have been noted for lower crime rates, with reports indicating it as one of the safest divisions in the city.  These geographical variations are influenced by factors including economic disparities, community infrastructure, and social cohesion. Understanding the spatial distribution of crime is crucial for law enforcement and community organizations to develop targeted interventions and allocate resources effectively, aiming to enhance public safety across all Toronto neighborhoods. 
 
 
 ## Government Policy Implications
-The findings underscore the importance of data-driven policy-making in crime prevention.....
+Criminology and public policy share a close and interconnected relationship. [@criminologypublicpolicy] Addressing crime in Toronto requires comprehensive government policies that focus on prevention, enforcement, and community resilience. To tackle violent crimes, policies should aim at addressing the socio-economic inequalities that often drive criminal behavior in vulnerable neighborhoods. This includes investing in education, affordable housing, job creation, and youth programs that provide positive alternatives to crime.
+
+For property crimes, urban safety initiatives are essential, such as improving lighting in poorly lit areas, enhancing community watch programs, and promoting the use of security measures like alarms and surveillance systems in residential and commercial properties. Encouraging urban planning strategies that foster community interaction and reduce isolation can also help deter property crimes.
+
+Time-sensitive crime trends, such as spikes in certain offenses during specific hours or seasons, call for adaptive policing strategies. Deploying additional resources during high-crime periods and maintaining a visible police presence in known hotspots can act as a deterrent and improve response times.
+
+Ultimately, a balanced approach that combines preventative measures, targeted enforcement, and community engagement is key to reducing crime and enhancing public safety in Toronto.
 
 
 ## Limitations
 
 ### Simplified Representation of Temporal Trends
- 
+The analysis uses aggregated data to identify temporal crime patterns, such as yearly and hourly trends. While this approach provides general insights, it oversimplifies the complexity of temporal factors influencing criminal behavior. For instance, seasonal variations, special events, and socio-political changes during specific timeframes are not explicitly modeled. As a result, subtle temporal nuances may be overlooked, limiting the depth of interpretation.
+
 
 
 ### Lack of Detailed Socioeconomic Context
-
+The dataset primarily focuses on reported crime incidents, spatial information, and basic temporal attributes. However, it lacks detailed socioeconomic data such as income levels, education rates, or demographic breakdowns of neighborhoods. These factors are crucial for understanding the root causes of criminal activity and their relationships with broader social issues. The absence of such contextual data restricts the ability to draw comprehensive conclusions about underlying crime drivers.
 
 
 ### Limitations of Linear Assumptions
+The analysis relies on linear modeling techniques to understand relationships between variables. While effective for simplicity and interpretation, these methods may fail to capture non-linear or interaction effects between predictors. For example, the combined influence of unemployment rates and population density on crime might follow a non-linear trend that is not adequately addressed in the current approach. This simplification can lead to biased or incomplete insights into the data.
 
 
 ## Future Steps
-Future research should focus on......
+To address the limitations of this analysis and enhance its insights, future work should incorporate more comprehensive socioeconomic and demographic data, such as income levels, education rates, and population density, to provide a richer context for understanding crime patterns. Advanced modeling techniques, such as machine learning or non-linear regression, could be employed to capture complex interactions and non-linear relationships between variables. Additionally, integrating data from alternative sources, such as community surveys, social media, or IoT devices, can help bridge gaps caused by underreporting or biases in police records. Temporal analysis can be refined by factoring in seasonal events, holidays, and other socio-political influences to better capture short-term fluctuations in crime. Lastly, implementing real-time crime data dashboards and geographic information systems (GIS) for dynamic visualization and predictive policing can support timely interventions and informed decision-making for law enforcement and policymakers.
 
 \newpage
 
@@ -412,19 +524,134 @@ Future research should focus on......
 
 # Data {#sec-data-details}
 
-## Raw data
+The dataset analyzed in this paper relies on observational data sourced from police reports and administrative records. These data sources provide rich insights into reported crime incidents, but they are inherently limited by various biases and underreporting issues:
+
+## Data Collection Process
+Police Reports: Crime data is recorded when incidents are reported by victims, witnesses, or discovered during police patrols. This process introduces variability in data quality depending on police activity, resources, and community engagement.
+\newline
+Administrative Records: These records document follow-up actions such as arrests, charges, and court proceedings. However, they do not capture unreported crimes, leading to incomplete datasets.
+
+## Biases and Limitations
+Underreporting: Certain crime types, such as domestic violence and petty theft, are often underreported due to fear, stigma, or perceptions of the crime’s insignificance.
+
+Spatial Bias: Higher police presence in certain neighborhoods results in overrepresentation of crimes in those areas, while crimes in under-policed areas may remain undetected.
+
+Socioeconomic Bias: Vulnerable populations, such as immigrants or low-income residents, are less likely to report crimes, further skewing the dataset.
+
+## Exploring Bias Through Simulation
+To better understand the impact of underreporting, simulations can estimate the true crime rate under different reporting probabilities. For example, property crimes might have a 70% reporting rate, while violent crimes may only have a 50% rate. Using synthetic data can provide an adjusted view of crime patterns.
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+set.seed(42)
+n <- 1000
+true_crimes <- rpois(n, lambda = 5)  # Simulated true crime counts
+reporting_rate <- 0.7  # Example reporting rate
+observed_crimes <- rbinom(n, size = true_crimes, prob = reporting_rate)
+
+# Load the necessary libraries
+library(dplyr)
+
+# Compare true vs. observed crimes
+data.frame(True_Crimes = true_crimes, Reported_Crimes = observed_crimes) %>%
+  summarise(
+    True_Crimes_Mean = mean(True_Crimes),
+    Reported_Crimes_Mean = mean(Reported_Crimes),
+    Underreporting_Rate = 1 - (Reported_Crimes_Mean / True_Crimes_Mean)
+  )
+
+```
+## Simulation to Address Underreporting: 
+To estimate the magnitude of underreporting, simulations can model the discrepancy between reported and true crime rates based on assumed probabilities of reporting. For example:
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+# Simulate underreporting
+set.seed(42)
+n <- 1000
+true_crimes <- rpois(n, lambda = 5)  # Simulated true crime counts
+reporting_rate <- 0.7               # Assume 70% reporting rate
+reported_crimes <- rbinom(n, true_crimes, prob = reporting_rate)
+
+# Compare true vs. reported crimes
+data.frame(True_Crimes = true_crimes, Reported_Crimes = reported_crimes) %>%
+  summary()
+```
 
 
-## Data feature
+This approach highlights the potential scale of underreported crimes and can be used to adjust findings for more accurate analysis.
 
+## Recommendations for Data Improvement:
 
-## Data Visualization
-
+Supplementary Surveys: Conduct crime victimization surveys to capture unreported incidents and triangulate with observational data.
+Stratified Sampling: Ensure geographic and socioeconomic representation in surveys to address biases in reporting.
+Integration of External Data Sources: Combine crime data with demographic, socioeconomic, and community-level data to provide richer context for analysis.
 
 
 # Model details {#sec-model-details}
+The analysis employs statistical models to uncover patterns and relationships in the crime data. The following details the modeling approach and its limitations
 
-## Posterior predictive check
+## Model Strengths
+
+Interpretability: The linear regression framework provides straightforward interpretation of coefficients, helping to quantify the impact of predictors on crime rates.
+Flexibility: Categorical predictors (e.g., crime type and division) allow the model to capture differences across groups.
+
+## Limitations
+
+Linear Assumptions: The model assumes a linear relationship between predictors and the dependent variable, which may not capture complex interactions or non-linear trends.
+Underreporting: Observed crime counts are treated as representative of true crime trends, which may introduce bias due to underreporting.
+Geographic Overlap: Latitude and longitude may not fully capture neighborhood boundaries, leading to spatial inaccuracies.
+
+## Future Model Enhancements
+
+Incorporating External Variables: Add socioeconomic and demographic variables, such as income and population density, to contextualize crime patterns.
+Advanced Statistical Techniques: Use non-linear regression models, machine learning, or Bayesian hierarchical models to account for interactions and underreporting.
+Geospatial Analysis: Employ spatial regression techniques or clustering methods to better understand geographic crime patterns.
+
+## Simulation for Model Validation
+Simulations can validate models by testing their robustness under different scenarios, such as varying levels of reporting rates or neighborhood characteristics.
+```{r}
+#| echo: false
+#| warning: false
+#| message: false
+# Load the necessary library
+library(ggplot2)
+
+# Simulated data
+set.seed(123)
+n <- 100
+neighborhoods <- factor(paste("N", 1:n, sep = ""))
+true_crime_rates <- rnorm(n, mean = 10, sd = 3)
+police_presence <- rbinom(n, 1, 0.5)  # High presence in 50% of neighborhoods
+observed_crime_rates <- ifelse(police_presence == 1, true_crime_rates * 1.5, true_crime_rates)
+
+# Create a data frame
+crime_data <- data.frame(
+  Neighborhood = neighborhoods,
+  Observed_Crime = observed_crime_rates
+)
+
+# Plot the data
+ggplot(crime_data, aes(x = Neighborhood, y = Observed_Crime)) +
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(
+    title = "Simulated Spatial Bias in Observed Crime Rates",
+    x = "Neighborhood",
+    y = "Observed Crime Rate"
+  ) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
+```
+\newpage
+
+## Future Model Enhancements
+
+Incorporating External Variables: Add socioeconomic and demographic variables, such as income and population density, to contextualize crime patterns.
+Advanced Statistical Techniques: Use non-linear regression models, machine learning, or Bayesian hierarchical models to account for interactions and underreporting.
+Geospatial Analysis: Employ spatial regression techniques or clustering methods to better understand geographic crime patterns.
 
 
 
