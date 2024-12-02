@@ -1,6 +1,6 @@
 ---
 title: "Exploring Temporal and Spatial Patterns of Major Crime Indicators"
-subtitle: "An analysis for for Toronto Urban Safety and Policy Design"
+subtitle: "An analysis for Toronto Urban Safety and Policy Design"
 author: 
   - Yuechen Zhang
 thanks: "Code and data are available at: https://github.com/Yuechen-Zhang603/Major-Crime-Indicators"
