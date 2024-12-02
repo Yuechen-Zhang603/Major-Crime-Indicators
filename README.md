@@ -5,6 +5,8 @@
 
 This repository contains an analysis of temporal and spatial trends in major crime indicators in Toronto from 2014 to 2024. The project aims to understand the relationship between crime rates, time, and geographical factors, using the Toronto Major Crime Indicators dataset. The findings inform targeted crime prevention strategies and policy recommendations. Linear regression models were applied to identify key predictors of crime rates, and visualizations were used to highlight trends and patterns across neighborhoods and timeframes.
 
+Since the dataset files are too large to upload, so it be compressed to a zip file. Please make sure unzip it after download at first.
+
 
 ## File Structure
 
