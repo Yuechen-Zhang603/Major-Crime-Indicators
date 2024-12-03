@@ -24,10 +24,3 @@ The repo is structured as:
 
 Aspects of the code were written with the help of the chat tool, Chat-GPT. The words parts of introduction and anlysis for graphs also were written with the help of Chat-GPT and the entire chat history is available in other/llm_usage/usage.txt.
 
-## Some checks
-
-- [ ] Change the rproj file name so that it's not starter_folder.Rproj
-- [ ] Change the README title so that it's not Starter folder
-- [ ] Remove files that you're not using
-- [ ] Update comments in R scripts
-- [ ] Remove this checklist
